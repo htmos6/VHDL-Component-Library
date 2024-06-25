@@ -2,7 +2,7 @@
 -- Company: 
 -- Engineer: 
 -- 
--- Create Date: 25.06.2024 00:08:29
+-- Create Date: 25.06.2024 13:20:47
 -- Design Name: 
 -- Module Name: FullAdder - Behavioral
 -- Project Name: 
@@ -20,10 +20,7 @@
 
 
 library IEEE;
-use IEEE.std_logic_1164.ALL;
-use IEEE.std_logic_arith.all;
-use IEEE.std_logic_unsigned.ALL;
-
+use IEEE.STD_LOGIC_1164.ALL;
 
 -- Uncomment the following library declaration if using
 -- arithmetic functions with Signed or Unsigned values
@@ -34,25 +31,61 @@ use IEEE.std_logic_unsigned.ALL;
 --library UNISIM;
 --use UNISIM.VComponents.all;
 
-entity HalfAdder is
+entity FullAdder is
 port 
-( 
+(
 	a_i : in std_logic;
 	b_i : in std_logic;
+	carry_i : in std_logic;
 	
 	out_o : out std_logic;
 	carry_o : out std_logic
 );
-end HalfAdder;
+end FullAdder;
 
-architecture Behavioral of HalfAdder is
+architecture Behavioral of FullAdder is
 
+	component HalfAdder is
+	port 
+	( 
+		a_i : in std_logic;
+		b_i : in std_logic;
+		
+		out_o : out std_logic;
+		carry_o : out std_logic
+	);
+	end component HalfAdder;
+	
+	signal carry_HA_1 : std_logic := '0';
+	signal out_HA_1 : std_logic := '0';
+	
+	signal carry_HA_2 : std_logic := '0';
+	signal out_HA_2 : std_logic := '0';
+
+	
 begin
+	
+	HalfAdder1 : HalfAdder
+	port map 
+	(
+		a_i => a_i,
+		b_i => b_i,
+	
+		out_o => out_HA_1,
+		carry_o => carry_HA_1
+	);
 
-	P_COMBINATIONAL : process (a_i, b_i)
-	begin
-		out_o <= a_i xor b_i;
-		carry_o <= a_i and b_i;	
-	end process P_COMBINATIONAL;
-
+	HalfAdder2 : HalfAdder
+	port map 
+	(
+		a_i => out_HA_1,
+		b_i => carry_i,
+	
+		out_o => out_HA_2,
+		carry_o => carry_HA_2
+	);
+	
+	carry_o <= carry_HA_1 or carry_HA_2;
+	out_o <= out_HA_2;
+	
 end Behavioral;

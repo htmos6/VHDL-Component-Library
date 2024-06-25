@@ -26,7 +26,6 @@
 
 # general whitelist
 !.publish
-!.git*
 
 *.cf
 JSONTestSuite/config.pkg.vhdl

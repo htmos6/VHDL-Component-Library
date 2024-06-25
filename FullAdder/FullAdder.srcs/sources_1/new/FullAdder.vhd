@@ -41,7 +41,7 @@ port
 	out_o : out std_logic;
 	carry_o : out std_logic
 );
-end FullAdder;
+end entity FullAdder;
 
 architecture Behavioral of FullAdder is
 

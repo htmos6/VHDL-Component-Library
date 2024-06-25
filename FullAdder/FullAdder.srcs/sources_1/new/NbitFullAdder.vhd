@@ -45,11 +45,15 @@ entity NbitFullAdder is
 		out_o : out std_logic_vector (N-1 downto 0);
 		carry_o : out std_logic
 	);
-end NbitFullAdder;
+end entity;
 
 
 architecture Behavioral of NbitFullAdder is
 	
+	
+	signal temp : std_logic_vector (N downto 0) := (others => '0');
+	signal sum : std_logic_vector (N-1 downto 0) := (others => '0');
+
 	component FullAdder is
 	port 
 	(
@@ -61,14 +65,8 @@ architecture Behavioral of NbitFullAdder is
 		carry_o : out std_logic
 	);
 	end component;
-
-	signal temp : std_logic_vector (N downto 0) := (others => '0');
-	signal sum : std_logic_vector (N-1 downto 0) := (others => '0');
 	
 begin
-	
-	temp(0) <= carry_i;
-	carry_o <= temp(N);
 	
 	N_BIT_ADDER : for k in 0 to N-1 generate
 	
@@ -82,14 +80,11 @@ begin
 			out_o => sum(k),
 			carry_o => temp(k+1)
 		);
-	
-	
-	end generate N_BIT_ADDER;
+	end generate;
 	
 	out_o <= sum;
 
+	temp(0) <= carry_i;
+	carry_o <= temp(N);
 
-
-
-
-end Behavioral;
+end architecture;

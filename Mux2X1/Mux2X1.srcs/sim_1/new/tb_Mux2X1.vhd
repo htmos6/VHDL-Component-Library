@@ -113,6 +113,9 @@ begin
         in0_i <= X"AC"; in1_i <= X"EF"; sel_i <= '1';
         wait for 10 ns;
         assert (out_o =  X"EF") report "Test case 6 failed" severity error;
+		
+		
+		report "TEST CASES COMPLETED SUCCESSFULLY" severity note;
 
         -- End simulation
         wait;

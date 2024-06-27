@@ -84,15 +84,35 @@ begin
 	-- Stimulus process to apply test vectors
     stim_proc: process
     begin
-        -- Test case 1: 0 + 0 + 0
+        -- Test case 1:
         in0_i <= X"AB"; in1_i <= X"BC"; sel_i <= '0';
         wait for 10 ns;
         assert (out_o = X"AB") report "Test case 1 failed" severity error;
 
-        -- Test case 2: 1 + 1 + 0
+        -- Test case 2:
         in0_i <= X"AB"; in1_i <= X"BC"; sel_i <= '1';
         wait for 10 ns;
         assert (out_o =  X"BC") report "Test case 2 failed" severity error;
+		
+		-- Test case 3:
+        in0_i <= X"AB"; in1_i <= X"BC"; sel_i <= '0';
+        wait for 10 ns;
+        assert (out_o =  X"AB") report "Test case 3 failed" severity error;
+		
+		-- Test case 4:
+        in0_i <= X"AC"; in1_i <= X"BC"; sel_i <= '0';
+        wait for 10 ns;
+        assert (out_o =  X"AC") report "Test case 4 failed" severity error;
+		
+		-- Test case 5:
+        in0_i <= X"AC"; in1_i <= X"BC"; sel_i <= '1';
+        wait for 10 ns;
+        assert (out_o =  X"BC") report "Test case 5 failed" severity error;
+		
+		-- Test case 6:
+        in0_i <= X"AC"; in1_i <= X"EF"; sel_i <= '1';
+        wait for 10 ns;
+        assert (out_o =  X"EF") report "Test case 6 failed" severity error;
 
         -- End simulation
         wait;

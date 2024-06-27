@@ -131,4 +131,4 @@ JSONTestSuite/config.pkg.vhdl
 *.tcl
 *.jou
 
-*.src/utils*/
+*.src/utils_1

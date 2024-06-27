@@ -41,7 +41,7 @@ port
 	out_o : out std_logic;
 	carry_o : out std_logic
 );
-end entity FullAdder;
+end entity;
 
 architecture Behavioral of FullAdder is
 
@@ -54,7 +54,7 @@ architecture Behavioral of FullAdder is
 		out_o : out std_logic;
 		carry_o : out std_logic
 	);
-	end component HalfAdder;
+	end component;
 	
 	signal carry_HA_1 : std_logic := '0';
 	signal out_HA_1 : std_logic := '0';
@@ -88,4 +88,4 @@ begin
 	carry_o <= carry_HA_1 or carry_HA_2;
 	out_o <= out_HA_2;
 	
-end Behavioral;
+end architecture;

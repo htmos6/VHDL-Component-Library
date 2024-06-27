@@ -3,8 +3,8 @@
 # SW Build 5076996 on Wed May 22 18:37:14 MDT 2024
 # IP Build 5075265 on Wed May 22 21:45:21 MDT 2024
 # SharedData Build 5076995 on Wed May 22 18:29:18 MDT 2024
-# Start of session at: Tue Jun 25 15:34:49 2024
-# Process ID: 5912
+# Start of session at: Tue Jun 25 22:58:42 2024
+# Process ID: 17680
 # Current directory: C:/Users/Legion/Desktop/Quartus/VHDL/VHDL-Tutorials/FullAdder/FullAdder.runs/synth_1
 # Command line: vivado.exe -log NbitFullAdder.vds -product Vivado -mode batch -messageDb vivado.pb -notrace -source NbitFullAdder.tcl
 # Log file: C:/Users/Legion/Desktop/Quartus/VHDL/VHDL-Tutorials/FullAdder/FullAdder.runs/synth_1/NbitFullAdder.vds
@@ -19,6 +19,6 @@
 # Host memory       :17053 MB
 # Swap memory       :2550 MB
 # Total Virtual     :19603 MB
-# Available Virtual :4786 MB
+# Available Virtual :4847 MB
 #-----------------------------------------------------------
 source NbitFullAdder.tcl -notrace

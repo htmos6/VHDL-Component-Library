@@ -56,6 +56,12 @@ if {$::dispatch::connected} {
 }
 
 OPTRACE "synth_1" START { ROLLUP_AUTO }
+set_param chipscope.maxJobs 3
+set_param power.BramSDPPropagationFix 1
+set_param power.enableUnconnectedCarry8PinPower 1
+set_param power.enableCarry8RouteBelPower 1
+set_param power.enableLutRouteBelPower 1
+set_msg_config -id {Common 17-41} -limit 10000000
 OPTRACE "Creating in-memory project" START { }
 create_project -in_memory -part xczu7ev-ffvc1156-2-e
 
@@ -91,7 +97,7 @@ read_checkpoint -auto_incremental -incremental C:/Users/Legion/Desktop/Quartus/V
 close [open __synthesis_is_running__ w]
 
 OPTRACE "synth_design" START { }
-synth_design -top NbitFullAdder -part xczu7ev-ffvc1156-2-e
+synth_design -top NbitFullAdder -part xczu7ev-ffvc1156-2-e -flatten_hierarchy none -directive RuntimeOptimized -fsm_extraction off
 OPTRACE "synth_design" END { }
 if { [get_msg_config -count -severity {CRITICAL WARNING}] > 0 } {
  send_msg_id runtcl-6 info "Synthesis results are not added to the cache due to CRITICAL_WARNING"

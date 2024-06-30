@@ -26,7 +26,7 @@ architecture Behavioral of Debounce is
 
 	constant c_timer_lim : integer := c_clk_frequency / c_debounce_frequency; -- To hold 1 ms, need to count till -> 1ms/10ns = 100_000 times
 	
-	signal timer : integer range 0 to c_timer_lim  := 0;
+	signal timer : integer range 0 to c_timer_lim := 0;
 	signal timer_enable : std_logic := '0';
 	signal timer_done : std_logic := '0';
 	
@@ -40,8 +40,10 @@ begin
 		case state is 
 			when S_INITIAL =>
 				if (c_signal_init = '0') then 
+					signal_o <= c_signal_init;
 					state <= S_ZERO;
 				else 
+					signal_o <= c_signal_init;
 					state <= S_ONE;
 				end if;
 			

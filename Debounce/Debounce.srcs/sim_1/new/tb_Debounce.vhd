@@ -31,9 +31,10 @@ architecture Behavioral of tb_Debounce is
 
 	signal clk_i : std_logic := '0';
 	signal signal_i : std_logic := '0';
-	signal signal_o : std_logic := '0';
+	signal signal_o : std_logic := '1';
 	
-	constant c_clk_period : time := 1 ns / real(c_clk_frequency);
+	constant c_clk_period : time := 1 sec / real(c_clk_frequency);
+	constant debounce_stability_time : time := 1 sec / real(c_debounce_frequency);
 	
 begin
 
@@ -62,26 +63,80 @@ begin
 	
 	PROCESS_DEBOUNCE : process begin
 	
-		-- Test case 1: signal_i = '0'
+		-- Test case 1: signal_i transitions from '0' to '1'
+		wait for 100 ns;
+
 		signal_i <= '0';
-		wait for 1 ns;
+		wait until rising_edge(clk_i);
 
-		-- Change signal_i to '1' and wait for the half of the debounce period
+		-- Change signal_i to '1' and wait for half of the debounce period
 		signal_i <= '1';
-		wait for 5 * c_clk_period;
-		
-		-- Assert that signal_o remains '0' initially (at the middle of the debounce period)
-		assert (signal_o = '0') report "Test case 1 failed" severity error;
+		wait for debounce_stability_time / 2;
+		wait for 80 ns;
 
-		-- Wait for another debounce period to ensure stable output
-		wait for 5 * c_clk_period;
+		-- Assert that signal_o remains '0' initially (at the middle of the debounce period)
+		assert (signal_o = '0') report "Test case 1.1 failed" severity error;
+
+		-- Complete another debounce period to ensure stable output
+		wait for debounce_stability_time / 2;
+		wait for 80 ns;
 
 		-- Assert that signal_o becomes '1' after debounce period
-		assert (signal_o = '1') report "Test case 1 failed" severity error;
+		assert (signal_o = '1') report "Test case 1.2 failed" severity error;
 
-	
-	
-	
+
+
+		-- Test case 2: signal_i transitions from '1' to '0'
+		wait until rising_edge(clk_i);
+		signal_i <= '0';
+
+		-- Change signal_i to '0' and wait for half of the debounce period
+		wait for debounce_stability_time / 2;
+		wait for 80 ns;
+
+		-- Assert that signal_o remains '1' initially (at the middle of the debounce period)
+		assert (signal_o = '1') report "Test case 2.1 failed" severity error;
+
+		-- Complete another debounce period to ensure stable output
+		wait for debounce_stability_time / 2;
+		wait for 80 ns;
+
+		-- Assert that signal_o becomes '0' after debounce period
+		assert (signal_o = '0') report "Test case 2.2 failed" severity error;
+
+
+
+		-- Test case 3: signal_i transitions from '0' to '1' to '0'
+		wait until rising_edge(clk_i);
+
+		-- Set signal_i to '1' and wait for a fraction of the debounce period
+		signal_i <= '1';
+		wait for debounce_stability_time / 5;
+
+		-- Set signal_i back to '0' and wait for the same fraction of the debounce period
+		signal_i <= '0';
+		wait for debounce_stability_time / 5;
+
+		-- Assert that signal_o remains '0' (debouncing in progress)
+		assert (signal_o = '0') report "Test case 3.1 failed" severity error;
+
+		-- Set signal_i to '1' again and wait for the same fraction of the debounce period
+		signal_i <= '1';
+		wait for debounce_stability_time / 5;
+
+		-- Assert that signal_o remains '0' (debouncing in progress)
+		assert (signal_o = '0') report "Test case 3.2 failed" severity error;
+
+		-- Wait for the complete debounce period to ensure stable output
+		wait for debounce_stability_time / 5;
+
+		-- Assert that signal_o remains '0' at the end of the debounce period
+		assert (signal_o = '0') report "Test case 3.3 failed" severity error;
+
+
+        report "TEST CASES COMPLETED SUCCESSFULLY" severity note;
+        -- End simulation
+        wait;
 	
 	end process;
 	

@@ -7,15 +7,15 @@ use IEEE.STD_LOGIC_UNSIGNED.ALL;
 entity Debounce is
 	generic 
 	(
-		c_clk_frequency 		: integer 		:= 100_000_000;    -- 1 cycle for clock time = 1/100_000_000 = 10ns
-		c_debounce_frequency    : integer 		:= 1_000;          -- 1 cycle for debounce time = 1/1000 = 1ms
-		c_signal_init  			: std_logic 	:= '0'  		   -- Will be used in the initial state to determine exact state.
+		c_clk_frequency : integer := 100_000_000; -- 1 cycle for clock time = 1/100_000_000 = 10ns
+		c_debounce_frequency : integer := 1_000; -- 1 cycle for debounce time = 1/1000 = 1ms
+		c_signal_init : std_logic := '0' -- Will be used in the initial state to determine exact state.
 	);
 	port 
 	(
-		clk_i					: in std_logic;
-		signal_i				: in std_logic;
-		signal_o				: out std_logic
+		clk_i : in std_logic;
+		signal_i : in std_logic;
+		signal_o : out std_logic
 	);
 end entity;
 
@@ -24,13 +24,13 @@ architecture Behavioral of Debounce is
 
 	type T_STATE is (S_INITIAL, S_ZERO, S_ZERO2ONE, S_ONE, S_ONE2ZERO);
 
-	constant c_timer_lim 		: integer 	    := c_clk_frequency / c_debounce_frequency;    -- To hold 1 ms, need to count till -> 1ms/10ns = 100_000 times
+	constant c_timer_lim : integer := c_clk_frequency / c_debounce_frequency; -- To hold 1 ms, need to count till -> 1ms/10ns = 100_000 times
 	
-	signal timer 				: integer range 0 to c_timer_lim  := 0;
-	signal timer_enable 		: std_logic                       := '0';
-	signal timer_done 			: std_logic 					  := '0';
+	signal timer : integer range 0 to c_timer_lim  := 0;
+	signal timer_enable : std_logic := '0';
+	signal timer_done : std_logic := '0';
 	
-	signal state 				: T_STATE                         := S_INITIAL;
+	signal state : T_STATE := S_INITIAL;
 
 begin
 

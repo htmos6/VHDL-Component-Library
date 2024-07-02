@@ -69,11 +69,14 @@ architecture Behavioral of SwissChronometer is
 	signal reset_debounced : std_logic := '0';
 	signal start_debounced : std_logic := '0';
 	signal start_debounced_previous : std_logic := '0';
-	signal continue : std_logic := '0';
 	
 	signal msec_counter : integer range 0 to c_msec_counter_limit := 0;
 	signal sec_counter : integer range 0 to c_sec_counter_limit := 0;
 	signal min_counter : integer range 0 to c_min_counter_limit := 0;
+	
+	type T_STATE is (S_STOP, S_CONTINUE);
+	
+	signal state : T_STATE := S_STOP;
 		
 	
 begin
@@ -162,13 +165,20 @@ begin
 	);
 	
 	
-	P_CONTROLLER : process (clk_i) begin 
+	P_STATE : process (clk_i) begin 
 		if (rising_edge(clk_i)) then
 			
 			start_debounced_previous <= start_debounced;
 		
+			-- If start button is pressed, updated state of the timer. 
  			if (start_debounced = '1' and start_debounced_previous = '0') then --   --\_ => previous is the right side of the signal => falling edge
-				continue <= not continue;
+				
+				if (state = S_STOP) then 
+					state <= S_CONTINUE;
+				elsif (state = S_CONTINUE) then
+					state <= S_STOP;
+				end if;
+				
 			end if;
 			
 		end if;
@@ -191,7 +201,7 @@ begin
 			    min_counter <= 0;
 			end if;
 			
-			if (continue = '1') then 
+			if (state = S_CONTINUE) then 
 				if (msec_counter = c_msec_counter_limit - 1) then 
 					msec_counter <= 0;
 					increment_msec <= '1';

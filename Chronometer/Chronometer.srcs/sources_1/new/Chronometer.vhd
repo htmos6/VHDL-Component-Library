@@ -7,8 +7,8 @@ use IEEE.STD_LOGIC_UNSIGNED.ALL;
 entity Chronometer is
 	generic 
 	(
-		ones_place_limit : integer := 5;
-		tens_place_limit : integer := 9	
+		ones_place_limit : integer := 9;
+		tens_place_limit : integer := 5	
 	);
 	port 
 	(
@@ -39,11 +39,11 @@ begin
 			if (increment_i = '1') then 
 				if (ones_place_counter = ones_place_limit) then
 					if (tens_place_counter = tens_place_limit) then
-						tens_place_counter <= 0;
-						ones_place_counter <= 0;
+						tens_place_counter <= (others => '0');
+						ones_place_counter <= (others => '0');
 					else
 						tens_place_counter <= tens_place_counter + 1;
-						ones_place_counter <= 0;
+						ones_place_counter <= (others => '0');
 					end if;
 				else
 					ones_place_counter <= ones_place_counter + 1;				
@@ -51,8 +51,8 @@ begin
 			end if;
 				
 			if (reset_i = '1') then 
-				ones_place_counter <= 0;
-				tens_place_counter <= 0;
+				ones_place_counter <= (others => '0');
+				tens_place_counter <= (others => '0');
 			end if;
 			
 		end if;

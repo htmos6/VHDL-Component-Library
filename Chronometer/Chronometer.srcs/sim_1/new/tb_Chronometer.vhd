@@ -89,6 +89,7 @@ begin
 		
 		reset_i <= '1';
 		wait until rising_edge(clk_i);
+		wait for 1 ns;
 		assert (ones_bcd_o = 0 and tens_bcd_o = 0) report "Test case RESET failed" severity error;  
 		
 		reset_i <= '0';

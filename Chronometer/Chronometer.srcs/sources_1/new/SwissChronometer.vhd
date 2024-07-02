@@ -1,5 +1,7 @@
 library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
+use IEEE.STD_LOGIC_ARITH.ALL;
+use IEEE.STD_LOGIC_UNSIGNED.ALL;
 
 
 
@@ -13,7 +15,10 @@ entity SwissChronometer is
 	(
 		clk_i : in std_logic;
 		start_i : in std_logic;
-		reset_i : in std_logic
+		reset_i : in std_logic;
+		msec_dec_o : out integer;
+		sec_dec_o : out integer;
+		min_dec_o : out integer
 	);
 end entity;
 
@@ -80,6 +85,10 @@ architecture Behavioral of SwissChronometer is
 		
 	
 begin
+	msec_dec_o <= conv_integer(unsigned(msec_tens_bcd)) * 10 + conv_integer(unsigned(msec_ones_bcd));
+	sec_dec_o <= conv_integer(unsigned(sec_tens_bcd)) * 10 + conv_integer(unsigned(sec_ones_bcd));
+	min_dec_o <= conv_integer(unsigned(min_tens_bcd)) * 10 + conv_integer(unsigned(min_ones_bcd));
+
 	-------------------------------------
 	--
 	-- 	Debounced Buttons Instantiation
@@ -205,7 +214,7 @@ begin
 				if (msec_counter = c_msec_counter_limit - 1) then 
 					msec_counter <= 0;
 					increment_msec <= '1';
-					sec_counter <= sec_counter + 1;
+					sec_counter <= sec_counter + 1; -- 1 ms passed
 				else 
 					msec_counter <= msec_counter + 1;
 				end if;
@@ -213,13 +222,13 @@ begin
 				-- 100 times counts causes to increment 'sec'
 				-- 100 times counts causes to increment 'min_counter'. 
 				-- If 'min_counter' reaches 60, it is a 1 minute.
-				if (sec_counter = c_sec_counter_limit - 1) then 
+				if (sec_counter = c_sec_counter_limit) then 
 					sec_counter <= 0;
 					increment_sec <= '1';
 					min_counter <= min_counter + 1;
 				end if;
 				
-				if (min_counter = c_min_counter_limit - 1) then 
+				if (min_counter = c_min_counter_limit) then 
 					min_counter <= 0;
 					increment_min <= '1';
 				end if;

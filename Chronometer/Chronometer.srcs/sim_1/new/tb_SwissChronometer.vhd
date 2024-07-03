@@ -5,7 +5,7 @@ use IEEE.STD_LOGIC_1164.ALL;
 entity tb_SwissChronometer is
 	generic 
 	(
-		c_clk_frequency : integer := 100;
+		c_clk_frequency : integer := 1_000_000;
 		c_debounce_frequency : integer := 10
 	);
 end entity;

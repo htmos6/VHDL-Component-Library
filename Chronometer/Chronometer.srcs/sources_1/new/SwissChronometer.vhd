@@ -211,28 +211,30 @@ begin
 			end if;
 			
 			if (state = S_CONTINUE) then 
+				
 				if (msec_counter = c_msec_counter_limit - 1) then 
 					msec_counter <= 0;
 					increment_msec <= '1';
-					sec_counter <= sec_counter + 1; -- 1 ms passed
+					
+					if (sec_counter = c_sec_counter_limit - 1) then 
+						sec_counter <= 0;
+						increment_sec <= '1';
+						
+						if (min_counter = c_min_counter_limit - 1) then 
+							min_counter <= 0;
+							increment_min <= '1';
+						else 
+							min_counter <= min_counter + 1; -- 1 s passed
+						end if;
+						
+					else 
+						sec_counter <= sec_counter + 1;
+					end if;
+					
 				else 
 					msec_counter <= msec_counter + 1;
 				end if;
-				
-				-- 100 times counts causes to increment 'sec'
-				-- 100 times counts causes to increment 'min_counter'. 
-				-- If 'min_counter' reaches 60, it is a 1 minute.
-				if (sec_counter = c_sec_counter_limit) then 
-					sec_counter <= 0;
-					increment_sec <= '1';
-					min_counter <= min_counter + 1;
-				end if;
-				
-				if (min_counter = c_min_counter_limit) then 
-					min_counter <= 0;
-					increment_min <= '1';
-				end if;
-			
+
 			end if;
 			
 		end if;
